@@ -4,7 +4,7 @@ import styled from "styled-components";
 import MovieComponent from "./components/MovieComponent";
 import MovieInfoComponent from "./components/MovieInfoComponent";
 
-export const API_KEY = "a9118a3a";
+export const API_KEY = "k_9l3i4phm";
 
 const Container = styled.div`
   display: flex;
@@ -14,9 +14,9 @@ const AppName = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-`;
+  `;
 const Header = styled.div`
-  background-color: black;
+  background-color: #586A6A;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -59,7 +59,7 @@ const MovieListContainer = styled.div`
   flex-wrap: wrap;
   padding: 30px;
   gap: 25px;
-  justify-content: space-evenly;;
+  justify-content: space-evenly;
 `;
 const Placeholder = styled.img`
   width: 120px;
@@ -78,9 +78,9 @@ function App() {
 
   const fetchData = async (searchString) => {
     const response = await Axios.get(
-      `https://www.omdbapi.com/?s=${searchString}&apikey=${API_KEY}`,
+      `https://imdb-api.com/en/API/SearchSeries/${API_KEY}/${searchString}`
     );
-    updateMovieList(response.data.Search);
+    updateMovieList(response.data.results);
   };
 
   const onTextChange = (e) => {
@@ -95,7 +95,7 @@ function App() {
       <Header>
         <AppName>
           <MovieImage src="/react-movie-app/movie-icon.svg" />
-          React Movie App
+          React Movies
         </AppName>
         <SearchBox>
           <SearchIcon src="/react-movie-app/search-icon.svg" />

@@ -59,51 +59,38 @@ const Close = styled.span`
 const MovieInfoComponent = (props) => {
   const [movieInfo, setMovieInfo] = useState();
   const { selectedMovie } = props;
-
+  console.log(selectedMovie);
   useEffect(() => {
     Axios.get(
-      `https://www.omdbapi.com/?i=${selectedMovie}&apikey=${API_KEY}`,
-    ).then((response) => setMovieInfo(response.data));
-  }, [selectedMovie]);
+      `https://imdb-api.com/en/API/Title/${API_KEY}/${selectedMovie}/FullActor,Ratings`
+    ).then((response) => {
+      console.log(response.data);
+      setMovieInfo(response.data)
+    });
+  }, [selectedMovie]); //dodao props.onMovieSelect
   return (
+    // Naslov, slika, lista glumaca (API sve vraća) i rating na nekoliko portala
     <Container>
       {movieInfo ? (
         <>
-          <CoverImage src={movieInfo?.Poster} alt={movieInfo?.Title} />
+          <CoverImage src={movieInfo?.image} alt={movieInfo?.title} />
           <InfoColumn>
-            <MovieName>
-              {movieInfo?.Type}: <span>{movieInfo?.Title}</span>
-            </MovieName>
-            <MovieInfo>
-              IMDB Rating: <span>{movieInfo?.imdbRating}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Year: <span>{movieInfo?.Year}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Language: <span>{movieInfo?.Language}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Rated: <span>{movieInfo?.Rated}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Released: <span>{movieInfo?.Released}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Runtime: <span>{movieInfo?.Runtime}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Genre: <span>{movieInfo?.Genre}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Director: <span>{movieInfo?.Director}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Actors: <span>{movieInfo?.Actors}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Plot: <span>{movieInfo?.Plot}</span>
-            </MovieInfo>
+            { movieInfo.title ? (<MovieName>Title: <span>{movieInfo.title}</span></MovieName>) : null }
+            { movieInfo.ratings.imDb ? (<MovieInfo> IMDB Rating: <span>{movieInfo.ratings.imDb}</span></MovieInfo>) : null }
+            { movieInfo.ratings.metacritic ? (<MovieInfo> Metacritic: <span>{movieInfo.ratings.metacritic}</span></MovieInfo>) : null }
+            { movieInfo.ratings.rottenTomatoes ? (<MovieInfo> Rotten Tomatoes: <span>{movieInfo.ratings.rottenTomatoes}</span></MovieInfo>) : null }
+            { movieInfo.ratings.tV_com ? (<MovieInfo> TV.com: <span>{movieInfo.ratings.tV_com}</span></MovieInfo>) : null }
+            { movieInfo.ratings.theMovieDb ? (<MovieInfo> The Movie Database: <span>{movieInfo.ratings.theMovieDb}</span></MovieInfo>) : null }
+            { movieInfo.ratings.filmAffinity ? (<MovieInfo> Filmaffinity: <span>{movieInfo.ratings.filmAffinity}</span></MovieInfo>) : null }
+            <br />
+            { movieInfo.starList.length ? ( <MovieInfo>Actors:</MovieInfo>) : null }
+              {movieInfo.starList.length ? (
+                movieInfo.starList.map((star, index) => (
+                  <MovieInfo index={index}><span>{star.name}</span></MovieInfo>
+                ))
+              ) : (
+                null
+              )}
           </InfoColumn>
           <Close onClick={() => props.onMovieSelect()}>X</Close>
         </>
